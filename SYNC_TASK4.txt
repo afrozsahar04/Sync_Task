@@ -1,0 +1,327 @@
+                             ***************************************Main.java****************************************
+public class Main {
+    private static User user;
+    private static Meter meter;
+
+    public static void main(String[] args) {
+        // Step 1: User Registration
+        UserRegistrationGUI userRegistrationGUI = new UserRegistrationGUI();
+
+        userRegistrationGUI.setRegisterButtonActionListener(e -> {
+            String name = userRegistrationGUI.getName();
+            String address = userRegistrationGUI.getAddress();
+            String meterID = userRegistrationGUI.getMeterID();
+            user = new User(name, address, meterID);
+            System.out.println("User registered: " + user.getName());
+
+            // Step 2: Meter Installation
+            MeterInstallationGUI meterInstallationGUI = new MeterInstallationGUI();
+
+            meterInstallationGUI.setInstallButtonActionListener(e1 -> {
+                String meterIDInput = meterInstallationGUI.getMeterID();
+                int initialReading = meterInstallationGUI.getInitialReading();
+                meter = new Meter(meterIDInput, initialReading);
+                System.out.println("Meter installed: " + meter.getMeterID());
+
+                // Step 3: Record Electricity Consumption
+                ElectricityConsumptionGUI electricityConsumptionGUI = new ElectricityConsumptionGUI();
+
+                electricityConsumptionGUI.setRecordButtonActionListener(e2 -> {
+                    String meterIDInput2 = electricityConsumptionGUI.getMeterID();
+                    int currentReading = electricityConsumptionGUI.getCurrentReading();
+
+                    if (meterIDInput2.equals(meter.getMeterID())) {
+                        ElectricityConsumptionManager manager = new ElectricityConsumptionManager(meter);
+                        manager.recordElectricityConsumption(currentReading);
+
+                        // Step 4: Generate Bill and Display
+                        BillGUI billGUI = new BillGUI(user, meter, currentReading);
+                    } else {
+                        System.out.println("Invalid meter ID.");
+                    }
+                });
+            });
+        });
+    }
+}
+
+                               ***************************************Meter.java****************************************
+public class Meter {
+    private String meterID;
+    private int currentReading;
+
+    // Constructor
+    public Meter(String meterID, int initialReading) {
+        this.meterID = meterID;
+        this.currentReading = initialReading;
+    }
+
+    // Getters
+    public String getMeterID() {
+        return meterID;
+    }
+
+    public int getCurrentReading() {
+        return currentReading;
+    }
+
+    // Setters (optional, if needed in the future)
+    public void setMeterID(String meterID) {
+        this.meterID = meterID;
+    }
+
+    public void setCurrentReading(int currentReading) {
+        this.currentReading = currentReading;
+    }
+}
+
+                               ***************************************User.java****************************************
+public class User {
+    private String name;
+    private String address;
+    private String meterID;
+
+    // Constructor
+    public User(String name, String address, String meterID) {
+        this.name = name;
+        this.address = address;
+        this.meterID = meterID;
+    }
+
+    // Getters
+    public String getName() {
+        return name;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public String getMeterID() {
+        return meterID;
+    }
+
+    // Setters (optional, if needed in the future)
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setMeterID(String meterID) {
+        this.meterID = meterID;
+    }
+}
+
+                       ***************************************UserRegistrationGUI.java****************************************
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class UserRegistrationGUI {
+    private JTextField nameField;
+    private JTextField addressField;
+    private JTextField meterIDField;
+    private JButton registerButton;
+
+    public UserRegistrationGUI() {
+        JFrame frame = new JFrame("User Registration");
+        frame.setSize(400, 200);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(4, 2));
+
+        JLabel nameLabel = new JLabel("Name:");
+        nameField = new JTextField();
+        JLabel addressLabel = new JLabel("Address:");
+        addressField = new JTextField();
+        JLabel meterIDLabel = new JLabel("Meter ID:");
+        meterIDField = new JTextField();
+        registerButton = new JButton("Register");
+
+        panel.add(nameLabel);
+        panel.add(nameField);
+        panel.add(addressLabel);
+        panel.add(addressField);
+        panel.add(meterIDLabel);
+        panel.add(meterIDField);
+        panel.add(registerButton);
+
+        frame.add(panel);
+        frame.setVisible(true);
+    }
+
+    public String getName() {
+        return nameField.getText();
+    }
+
+    public String getAddress() {
+        return addressField.getText();
+    }
+
+    public String getMeterID() {
+        return meterIDField.getText();
+    }
+
+    public void setRegisterButtonActionListener(ActionListener listener) {
+        registerButton.addActionListener(listener);
+    }
+}
+                          ***************************************MeterInstallationGUI.java****************************************
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class MeterInstallationGUI {
+    private JTextField meterIDField;
+    private JTextField initialReadingField;
+    private JButton installButton;
+
+    public MeterInstallationGUI() {
+        JFrame frame = new JFrame("Meter Installation");
+        frame.setSize(400, 200);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(3, 2));
+
+        JLabel meterIDLabel = new JLabel("Meter ID:");
+        meterIDField = new JTextField();
+        JLabel initialReadingLabel = new JLabel("Initial Reading:");
+        initialReadingField = new JTextField();
+        installButton = new JButton("Install");
+
+        panel.add(meterIDLabel);
+        panel.add(meterIDField);
+        panel.add(initialReadingLabel);
+        panel.add(initialReadingField);
+        panel.add(installButton);
+
+        frame.add(panel);
+        frame.setVisible(true);
+    }
+
+    public String getMeterID() {
+        return meterIDField.getText();
+    }
+
+    public int getInitialReading() {
+        return Integer.parseInt(initialReadingField.getText());
+    }
+
+    public void setInstallButtonActionListener(ActionListener listener) {
+        installButton.addActionListener(listener);
+    }
+}
+                          ***************************************ElectricityConsumptionGUI.java****************************************
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class ElectricityConsumptionGUI {
+    private JTextField meterIDField;
+    private JTextField currentReadingField;
+    private JButton recordButton;
+
+    public ElectricityConsumptionGUI() {
+        JFrame frame = new JFrame("Record Electricity Consumption");
+        frame.setSize(400, 200);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(3, 2));
+
+        JLabel meterIDLabel = new JLabel("Meter ID:");
+        meterIDField = new JTextField();
+        JLabel currentReadingLabel = new JLabel("Current Reading:");
+        currentReadingField = new JTextField();
+        recordButton = new JButton("Record");
+
+        panel.add(meterIDLabel);
+        panel.add(meterIDField);
+        panel.add(currentReadingLabel);
+        panel.add(currentReadingField);
+        panel.add(recordButton);
+
+        frame.add(panel);
+        frame.setVisible(true);
+    }
+
+    public String getMeterID() {
+        return meterIDField.getText();
+    }
+
+    public int getCurrentReading() {
+        return Integer.parseInt(currentReadingField.getText());
+    }
+
+    public void setRecordButtonActionListener(ActionListener listener) {
+        recordButton.addActionListener(listener);
+    }
+}
+
+                          ***************************************ElectricityConsumptionManager.java****************************************
+public class ElectricityConsumptionManager {
+    private Meter meter;
+
+    public ElectricityConsumptionManager(Meter meter) {
+        this.meter = meter;
+    }
+
+    public void recordElectricityConsumption(int currentReading) {
+        meter.setCurrentReading(currentReading);
+        System.out.println("Electricity consumption recorded successfully.");
+    }
+}
+
+
+                          ***************************************BillGUI.java****************************************
+
+import javax.swing.*;
+import java.awt.*;
+import java.text.DecimalFormat;
+
+public class BillGUI {
+    private JFrame frame;
+
+    public BillGUI(User user, Meter meter, int consumption) {
+        frame = new JFrame("Bill");
+        frame.setSize(400, 300);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(5, 2));
+
+        JLabel nameLabel = new JLabel("Name:");
+        JLabel addressLabel = new JLabel("Address:");
+        JLabel meterIDLabel = new JLabel("Meter ID:");
+        JLabel consumptionLabel = new JLabel("Electricity Consumption:");
+        JLabel paymentLabel = new JLabel("Payment Amount:");
+
+        JLabel nameValue = new JLabel(user.getName());
+        JLabel addressValue = new JLabel(user.getAddress());
+        JLabel meterIDValue = new JLabel(user.getMeterID());
+        JLabel consumptionValue = new JLabel(String.valueOf(consumption) + " units");
+
+        // Assuming 0.1 USD per unit for calculation
+        double paymentAmount = consumption * 0.1;
+        JLabel paymentValue = new JLabel(new DecimalFormat("#.##").format(paymentAmount) + " USD");
+
+        panel.add(nameLabel);
+        panel.add(nameValue);
+        panel.add(addressLabel);
+        panel.add(addressValue);
+        panel.add(meterIDLabel);
+        panel.add(meterIDValue);
+        panel.add(consumptionLabel);
+        panel.add(consumptionValue);
+        panel.add(paymentLabel);
+        panel.add(paymentValue);
+
+        frame.add(panel);
+        frame.setVisible(true);
+    }
+}
