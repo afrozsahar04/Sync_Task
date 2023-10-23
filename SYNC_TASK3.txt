@@ -1,0 +1,434 @@
+                              *******************************************Main.java****************************************
+package resume;
+
+public class Main {
+    public static void main(String[] args) {
+        FullNameWindow fullNameWindow = new FullNameWindow();
+        fullNameWindow.setVisible(true);
+    }
+}
+                              *******************************************FullNameWindow.java****************************************
+
+package resume;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class FullNameWindow extends JFrame {
+    private JTextField fullNameField;
+    private JButton submitButton;
+
+    public FullNameWindow() {
+        setTitle("Enter Full Name");
+        setSize(400, 200);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(new FlowLayout());
+
+        add(new JLabel("Full Name:"));
+        fullNameField = new JTextField(20);
+        add(fullNameField);
+
+        submitButton = new JButton("Submit");
+        submitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String fullName = fullNameField.getText();
+                EducationWindow educationWindow = new EducationWindow(fullName);
+                educationWindow.setVisible(true);
+                dispose(); // Close this window
+            }
+        });
+        add(submitButton);
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                new FullNameWindow().setVisible(true);
+            }
+        });
+    }
+}
+
+
+
+                             *******************************************EducationWindow.java****************************************
+package resume;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
+
+public class EducationWindow extends JFrame {
+    private String fullName;
+    private List<JTextField> educationFields;
+    private JButton addButton;
+
+    public EducationWindow(String fullName) {
+        this.fullName = fullName;
+        educationFields = new ArrayList<>();
+
+        setTitle("Educational Experience");
+        setSize(400, 300);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(new FlowLayout());
+
+        add(new JLabel("Educational Experiences:"));
+
+        addButton = new JButton("+");
+        addButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JTextField newField = new JTextField(20);
+                educationFields.add(newField);
+                add(newField);
+                revalidate();
+                repaint();
+            }
+        });
+        add(addButton);
+
+        JButton submitButton = new JButton("Submit");
+        submitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                List<String> educationalExperiences = new ArrayList<>();
+                for (JTextField field : educationFields) {
+                    educationalExperiences.add(field.getText());
+                }
+
+                ExperienceWindow experienceWindow = new ExperienceWindow(fullName, educationalExperiences);
+                experienceWindow.setVisible(true);
+                dispose(); // Close this window
+            }
+        });
+        add(submitButton);
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                new EducationWindow("John Doe").setVisible(true);
+            }
+        });
+    }
+}
+
+                             *******************************************ExperienceWindow.java****************************************
+package resume;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
+
+public class ExperienceWindow extends JFrame {
+    private String fullName;
+    private List<JTextField> experienceFields;
+    private JButton addButton;
+
+    public ExperienceWindow(String fullName, List<String> educationalExperiences) {
+        this.fullName = fullName;
+        experienceFields = new ArrayList<>();
+
+        setTitle("Work Experience");
+        setSize(400, 300);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(new FlowLayout());
+
+        add(new JLabel("Work Experiences:"));
+
+        addButton = new JButton("+");
+        addButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JTextField newField = new JTextField(20);
+                experienceFields.add(newField);
+                add(newField);
+                revalidate();
+                repaint();
+            }
+        });
+        add(addButton);
+
+        JButton submitButton = new JButton("Submit");
+        submitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                List<String> workExperiences = new ArrayList<>();
+                for (JTextField field : experienceFields) {
+                    workExperiences.add(field.getText());
+                }
+
+                SkillsWindow skillsWindow = new SkillsWindow(fullName, educationalExperiences, workExperiences);
+                skillsWindow.setVisible(true);
+                dispose(); // Close this window
+            }
+        });
+        add(submitButton);
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                List<String> educationalExperiences = new ArrayList<>();
+                educationalExperiences.add("Degree 1");
+                educationalExperiences.add("Degree 2");
+
+                new ExperienceWindow("John Doe", educationalExperiences).setVisible(true);
+            }
+        });
+    }
+}
+
+                             *******************************************SkillsWindow.java*****************************************
+package resume;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
+
+public class SkillsWindow extends JFrame {
+    private String fullName;
+    private List<JTextField> skillFields;
+    private JButton addButton;
+
+    public SkillsWindow(String fullName, List<String> educationalExperiences, List<String> workExperiences) {
+        this.fullName = fullName;
+        skillFields = new ArrayList<>();
+
+        setTitle("Skills");
+        setSize(400, 300);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(new FlowLayout());
+
+        add(new JLabel("Skills:"));
+
+        addButton = new JButton("+");
+        addButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JTextField newField = new JTextField(20);
+                skillFields.add(newField);
+                add(newField);
+                revalidate();
+                repaint();
+            }
+        });
+        add(addButton);
+
+        JButton submitButton = new JButton("Submit");
+        submitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                List<String> skills = new ArrayList<>();
+                for (JTextField field : skillFields) {
+                    skills.add(field.getText());
+                }
+
+                InterestWindow interestWindow = new InterestWindow(fullName, educationalExperiences, workExperiences, skills);
+                interestWindow.setVisible(true);
+                dispose(); // Close this window
+            }
+        });
+        add(submitButton);
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                List<String> educationalExperiences = new ArrayList<>();
+                educationalExperiences.add("Degree 1");
+                educationalExperiences.add("Degree 2");
+
+                List<String> workExperiences = new ArrayList<>();
+                workExperiences.add("Job 1");
+                workExperiences.add("Job 2");
+
+                new SkillsWindow("John Doe", educationalExperiences, workExperiences).setVisible(true);
+            }
+        });
+    }
+}
+
+
+                             *******************************************InterestWindow.java*****************************************
+package resume;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
+
+public class InterestWindow extends JFrame {
+    private String fullName;
+    private List<JTextField> interestFields;
+    private JButton addButton;
+
+    public InterestWindow(String fullName, List<String> educationalExperiences, List<String> workExperiences, List<String> skills) {
+        this.fullName = fullName;
+        interestFields = new ArrayList<>();
+
+        setTitle("Interests");
+        setSize(400, 300);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(new FlowLayout());
+
+        add(new JLabel("Interests:"));
+
+        addButton = new JButton("+");
+        addButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JTextField newField = new JTextField(20);
+                interestFields.add(newField);
+                add(newField);
+                revalidate();
+                repaint();
+            }
+        });
+        add(addButton);
+
+        JButton submitButton = new JButton("Submit");
+        submitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                List<String> interests = new ArrayList<>();
+                for (JTextField field : interestFields) {
+                    interests.add(field.getText());
+                }
+
+                String resumeContent = generateResumeContent(educationalExperiences, workExperiences, skills, interests);
+                ResumeDisplayWindow resumeDisplayWindow = new ResumeDisplayWindow(fullName, resumeContent);
+                resumeDisplayWindow.setVisible(true);
+                dispose(); // Close this window
+            }
+        });
+        add(submitButton);
+    }
+
+    private String generateResumeContent(List<String> educationalExperiences, List<String> workExperiences, List<String> skills, List<String> interests) {
+        StringBuilder content = new StringBuilder();
+
+        content.append("Full Name: ").append(fullName).append("\n\n");
+
+        content.append("Education:\n");
+        for (String education : educationalExperiences) {
+            content.append("- ").append(education).append("\n");
+        }
+
+        content.append("\nExperience:\n");
+        for (String experience : workExperiences) {
+            content.append("- ").append(experience).append("\n");
+        }
+
+        content.append("\nSkills:\n");
+        for (String skill : skills) {
+            content.append("- ").append(skill).append("\n");
+        }
+
+        content.append("\nInterests:\n");
+        for (String interest : interests) {
+            content.append("- ").append(interest).append("\n");
+        }
+
+        return content.toString();
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                List<String> educationalExperiences = new ArrayList<>();
+                educationalExperiences.add("Degree 1");
+                educationalExperiences.add("Degree 2");
+
+                List<String> workExperiences = new ArrayList<>();
+                workExperiences.add("Job 1");
+                workExperiences.add("Job 2");
+
+                List<String> skills = new ArrayList<>();
+                skills.add("Skill 1");
+                skills.add("Skill 2");
+
+                new InterestWindow("John Doe", educationalExperiences, workExperiences, skills).setVisible(true);
+            }
+        });
+    }
+}
+
+                   **************************************************ResumeDisplayWindow.java**************************************************
+
+package resume;
+
+import javax.swing.*;
+import java.awt.*;
+
+public class ResumeDisplayWindow extends JFrame {
+    public ResumeDisplayWindow(String fullName, String resumeContent) {
+        setTitle("Resume");
+        setSize(800, 600);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(new BorderLayout());
+
+        JTextArea resumeTextArea = new JTextArea(resumeContent);
+        resumeTextArea.setFont(new Font("Arial", Font.BOLD, 16));
+        resumeTextArea.setEditable(false);
+
+        JScrollPane scrollPane = new JScrollPane(resumeTextArea);
+        add(scrollPane, BorderLayout.CENTER);
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                String fullName = "John Doe";
+                String resumeContent = "Full Name: John Doe\n\n" +
+                        "Education:\n- Degree 1\n- Degree 2\n\n" +
+                        "Experience:\n- Job 1\n- Job 2\n\n" +
+                        "Skills:\n- Skill 1\n- Skill 2\n\n" +
+                        "Interests:\n- Interest 1\n- Interest 2";
+
+                new ResumeDisplayWindow(fullName, resumeContent).setVisible(true);
+            }
+        });
+    }
+}
+
+                   **************************************************ResumeBuilderApp.java**************************************************
+
+package resume;
+
+import javax.swing.*;
+
+public class ResumeBuilderApp {
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                FullNameWindow fullNameWindow = new FullNameWindow();
+                fullNameWindow.setVisible(true);
+            }
+        });
+    }
+}
+
+
+
