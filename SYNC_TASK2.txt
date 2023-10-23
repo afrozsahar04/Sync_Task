@@ -1,0 +1,164 @@
+                                  ********************************* OnlineSurveySystem.java ****************************************
+import javax.swing.*;
+import java.awt.*;
+import java.io.FileWriter;
+import java.io.IOException;
+
+public class OnlineSurveySystem extends JFrame {
+
+    private final JTextField usernameField;
+    private final JPasswordField passwordField;
+    private final JTextField nameField;
+    private final JTextField ageField;
+    private final JTextField colorField;
+    private final JTextField foodField;
+    private final JTextField occupationField;
+    private final JTextField frequencyField;
+    private final JTextField satisfactionField;
+    private final JTextField recommendationField;
+    private final JTextField featuresField;
+    private final JTextField educationField;
+
+    public OnlineSurveySystem() {
+        setTitle("Online Survey System");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(new CardLayout());
+
+        JPanel loginPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+
+        c.insets = new Insets(5, 5, 5, 5); // Add some padding
+
+        c.gridx = 0;
+        c.gridy = 0;
+        JLabel usernameLabel = new JLabel("Username:");
+        Font labelFont = usernameLabel.getFont();
+        usernameLabel.setFont(new Font(labelFont.getName(), Font.PLAIN, 14)); // Increase font size
+        loginPanel.add(usernameLabel, c);
+
+        c.gridx = 1;
+        c.gridy = 0;
+        usernameField = new JTextField(20); // Increase field size
+        Font fieldFont = usernameField.getFont();
+        usernameField.setFont(new Font(fieldFont.getName(), Font.PLAIN, 14)); // Increase font size
+        loginPanel.add(usernameField, c);
+
+        c.gridx = 0;
+        c.gridy = 1;
+        JLabel passwordLabel = new JLabel("Password:");
+        passwordLabel.setFont(new Font(labelFont.getName(), Font.PLAIN, 14)); // Increase font size
+        loginPanel.add(passwordLabel, c);
+
+        c.gridx = 1;
+        c.gridy = 1;
+        passwordField = new JPasswordField(20); // Increase field size
+        passwordField.setFont(new Font(fieldFont.getName(), Font.PLAIN, 14)); // Increase font size
+        loginPanel.add(passwordField, c);
+
+        c.gridx = 1;
+        c.gridy = 2;
+        c.anchor = GridBagConstraints.CENTER;
+        JButton loginButton = new JButton("Login");
+        loginButton.addActionListener(e -> {
+            String username = usernameField.getText();
+            String password = String.valueOf(passwordField.getPassword());
+
+            if (username.equals("afrozsahar04") && password.equals("afroz")) {
+                showSurvey();
+            } else {
+                JOptionPane.showMessageDialog(null, "Invalid username or password. Try again.");
+            }
+        });
+        loginPanel.add(loginButton, c);
+
+        add(loginPanel, "loginPanel");
+
+        // Create survey panel
+        JPanel surveyPanel = new JPanel();
+        surveyPanel.setLayout(new GridLayout(11, 2));
+
+        nameField = new JTextField();
+        ageField = new JTextField();
+        colorField = new JTextField();
+        foodField = new JTextField();
+        occupationField = new JTextField();
+        frequencyField = new JTextField();
+        satisfactionField = new JTextField();
+        recommendationField = new JTextField();
+        featuresField = new JTextField();
+        educationField = new JTextField();
+
+        surveyPanel.add(new JLabel("What is your name?"));
+        surveyPanel.add(nameField);
+
+        surveyPanel.add(new JLabel("What is your age?"));
+        surveyPanel.add(ageField);
+
+        surveyPanel.add(new JLabel("What is your favorite color?"));
+        surveyPanel.add(colorField);
+
+        surveyPanel.add(new JLabel("What is your favorite food?"));
+        surveyPanel.add(foodField);
+
+        surveyPanel.add(new JLabel("What is your occupation?"));
+        surveyPanel.add(occupationField);
+
+        surveyPanel.add(new JLabel("How frequently do you use our product/services?"));
+        surveyPanel.add(frequencyField);
+
+        surveyPanel.add(new JLabel("How satisfied are you with our product/services?"));
+        surveyPanel.add(satisfactionField);
+
+        surveyPanel.add(new JLabel("How likely are you to recommend our product/services to a friend or colleague"));
+        surveyPanel.add(recommendationField);
+
+        surveyPanel.add(new JLabel("What features do you like the most about our product/services?"));
+        surveyPanel.add(featuresField);
+
+        surveyPanel.add(new JLabel("What is your Highest level of education?"));
+        surveyPanel.add(educationField);
+
+        JButton submitButton = new JButton("Submit");
+
+        submitButton.addActionListener(e -> {
+            String name = nameField.getText();
+            int age = Integer.parseInt(ageField.getText());
+            String color = colorField.getText();
+            String food = foodField.getText();
+            String occupation = occupationField.getText();
+            String frequency = frequencyField.getText();
+            String satisfaction = satisfactionField.getText();
+            String recommendation = recommendationField.getText();
+            String features = featuresField.getText();
+            String education = educationField.getText();
+
+            try {
+                FileWriter writer = new FileWriter("survey_responses.txt", true);
+                writer.write(name + "," + age + "," + color + "," + food + "," + occupation + "," +
+                        frequency + "," + satisfaction + "," + recommendation + "," + features + "," + education + "\n");
+                writer.close();
+                JOptionPane.showMessageDialog(null, "Survey Submitted!");
+            } catch (IOException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(null, "An error occurred while saving the survey responses.");
+            }
+        });
+
+        surveyPanel.add(submitButton);
+
+        add(surveyPanel, "surveyPanel");
+    }
+
+    private void showSurvey() {
+        CardLayout cardLayout = (CardLayout) getContentPane().getLayout();
+        cardLayout.show(getContentPane(), "surveyPanel");
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            OnlineSurveySystem surveySystem = new OnlineSurveySystem();
+            surveySystem.setSize(400, 500);
+            surveySystem.setVisible(true);
+        });
+    }
+}
